@@ -1,0 +1,50 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_UserAccountsLayout";
+}
+
+<div class="jumbotron bg-light align-content-center">
+    <div class="card col-sm-7">
+        <div class="card-header text-center">
+            <h1 class="c-red">Register an Account</h1>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly"></div>
+                <div class="form-row form-group">
+                    <div class="text-justify" style="background-color:darkred;">
+                        <label class="text-white col-form-label p-2" asp-for="Email"></label>
+                    </div>
+                    <input class="form-control" asp-for="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-row form-group">
+                    <div class="text-justify" style="background-color:darkred;">
+                        <label class="text-white col-form-label p-2" asp-for="Password"></label>
+                    </div>
+                    <input class="form-control" asp-for="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-row form-group">
+                    <div class="text-justify" style="background-color:darkred;">
+                        <label class="text-white col-form-label p-2" asp-for="ConfirmPassword"></label>
+                    </div>
+                    <input class="form-control" asp-for="ConfirmPassword" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="text-center">
+                    <button class="btn bg-blue text-white" type="submit">Register</button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer text-center">
+            <a class="btn bg-red text-white" asp-controller="Home" asp-action="Welcome">Go back to home page</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+ }

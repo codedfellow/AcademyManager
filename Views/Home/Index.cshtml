@@ -1,0 +1,21 @@
+﻿@inject SignInManager<AMUser> signInManager  
+@inject UserManager<AMUser> userManager
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div class="jumbotron bg-light text-center" style="margin:auto 0;">
+        <img src="~/images/AcademyManagerLogo.png" height="90" width="90" />
+        <h1 class="c-red">Welcome to Academy Manager App</h1>
+        <p>Click on one of the link below to login or register a new account</p>
+        @if (signInManager.IsSignedIn(User))
+        {
+            <hr>
+            <p class="c-orange h4">Welcome @userManager.GetUserName(User)</p>
+        }
+        else
+        {
+            <a asp-controller="UserAccounts" asp-action="Register" class="btn btn-blue text-white">Register</a>
+            <a asp-controller="UserAccounts" asp-action="Login" class="btn btn-blue text-white">Login</a>
+        }    
+    </div>

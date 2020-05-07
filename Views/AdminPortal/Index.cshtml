@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="container-fluid">
+        <h1>Admin Portal</h1>
+        <table class="table">
+            <tr>
+                <td><a class="btn btn-info" asp-action="Index" asp-controller="Trainees">Trainees List</a></td>
+                <td><a class="btn btn-info" asp-action="Index" asp-controller="Administrators">Administrators List</a></td>
+                <td><a class="btn btn-info" asp-action="Index" asp-controller="Facilitators">Facilitators List</a></td>
+            </tr>
+            <tr>
+                <td><a class="btn btn-info" asp-action="AssignTraineeSerial" asp-controller="Trainees">Generate trainees Serial</a></td>
+                <td><a class="btn btn-info" asp-action="CreateCourse" asp-controller="Courses">Create course</a></td>
+                <td><a class="btn btn-info" asp-action="Index" asp-controller="Courses">Course List</a></td>
+            </tr>
+        </table>
+        <hr />
+        <h4>Create Trainees <a class="btn btn-blue" asp-action="CreateTrainees" asp-controller="Trainees">Create</a></h4>
+        <h4>Create Facilitators <a class="btn btn-blue" asp-action="CreateFacilitators" asp-controller="Facilitators">Create</a></h4>
+        <h4>Create Administrators <a class="btn btn-blue" asp-action="CreateAdministrators" asp-controller="Administrators">Create</a></h4>
+    </div>

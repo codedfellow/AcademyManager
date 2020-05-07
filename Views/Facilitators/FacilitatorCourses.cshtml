@@ -1,0 +1,34 @@
+﻿@model IEnumerable<AcademyManager.ViewModels.CourseVM>
+
+@{
+    ViewData["Title"] = "FacilitatorCourses";
+}
+
+<h1>Facilitator Courses</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CourseName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            <td>
+                <a class="btn btn-secondary" asp-action="AddTestOrExam" asp-route-id="@item.Id">Add Test or Exam</a>
+                <a class="btn btn-secondary" asp-action="ViewCourseDetails" asp-route-courseId="@item.Id">View Course Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

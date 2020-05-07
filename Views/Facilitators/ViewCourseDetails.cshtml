@@ -1,0 +1,17 @@
+﻿@model AcademyManager.ViewModels.CourseVM
+
+@{
+    ViewData["Title"] = "ViewCourseDetails";
+}
+    <div class="container-fluid">
+        <div>
+            <h4>@Model.CourseName Details</h4>
+            <hr />
+            <a class="btn bg-black text-white" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.Id">
+                View tests and exams for @Model.CourseName</a>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            <a asp-action="Index">Back to List</a>
+        </div>
+
+    </div>
