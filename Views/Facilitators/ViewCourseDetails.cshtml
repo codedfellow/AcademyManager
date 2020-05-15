@@ -7,11 +7,10 @@
         <div>
             <h4>@Model.CourseName Details</h4>
             <hr />
-            <a class="btn bg-black text-white" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.Id">
+            <a class="btn btn-secondary text-white" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.Id">
                 View tests and exams for @Model.CourseName</a>
         <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-            <a asp-action="Index">Back to List</a>
+            <a class="btn bg-gradient-maroon mt-3" asp-action="ManageCourses">Go back to Manage Courses</a>
         </div>
 
     </div>

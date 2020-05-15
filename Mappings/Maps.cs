@@ -16,12 +16,16 @@ namespace AcademyManager.Mappings
             CreateMap<AMUser, RegisterViewModel>().ReverseMap();
             CreateMap<AMUser, UserProfileVM>().ReverseMap();
             CreateMap<AMUser, EditProfileVM>().ReverseMap();
+            CreateMap<AMUser, UserVM>().ReverseMap();
             CreateMap<AMUser, TraineesVM>().ReverseMap();
+            CreateMap<AMUser, TraineeVM>().ReverseMap();
             CreateMap<AMUser, FacilitatorsVM>().ReverseMap();
+            CreateMap<AMUser, FacilitatorVM>().ReverseMap();
             CreateMap<Courses, CourseVM>().ReverseMap();
             CreateMap<Courses, CreateCourseVM>().ReverseMap();
             CreateMap<Courses, EditCourseVM>().ReverseMap();
             CreateMap<TestsAndExams, TestAndExamVM>().ReverseMap();
+            CreateMap<Scores, ScoresVM>().ReverseMap();
         }
     }
 }

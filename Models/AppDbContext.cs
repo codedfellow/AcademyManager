@@ -21,5 +21,9 @@ namespace AcademyManager.Models
         public DbSet<AcademyManager.ViewModels.CreateCourseVM> CreateCourseVM { get; set; }
         public DbSet<AcademyManager.ViewModels.CourseVM> CourseVM { get; set; }
         public DbSet<AcademyManager.ViewModels.TestAndExamVM> TestAndExamVM { get; set; }
+        public DbSet<AcademyManager.ViewModels.TraineeVM> TraineeVM { get; set; }
+        public DbSet<AcademyManager.ViewModels.ScoresVM> ScoresVM { get; set; }
+        public DbSet<AcademyManager.ViewModels.FacilitatorVM> FacilitatorVM { get; set; }
+        public DbSet<AcademyManager.ViewModels.UserVM> UserVM { get; set; }
     }
 }

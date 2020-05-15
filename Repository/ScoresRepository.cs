@@ -39,6 +39,18 @@ namespace AcademyManager.Repository
             return score;
         }
 
+        public Scores GetScoreByTestAndExamIdAndTraineeId(int testOrExamId, string traineeId)
+        {
+            var score = FindAll().Where(p => p.TestOrExamId == testOrExamId && p.TraineeId == traineeId).FirstOrDefault();
+            return score;
+        }
+
+        public ICollection<Scores> GetScoreByTestOrExamId(int testOrExamId)
+        {
+            var scoresForTestOrExam = FindAll().Where(p => p.TestOrExamId == testOrExamId).ToList();
+            return scoresForTestOrExam;
+        }
+
         public bool IsExist(int id)
         {
             var exists = _db.Scores.Any(q => q.Id == id);

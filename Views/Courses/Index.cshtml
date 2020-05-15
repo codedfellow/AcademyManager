@@ -8,32 +8,31 @@
         <h1>Index</h1>
 
         <p>
-            <a asp-action="Create">Create New</a>
+            <a asp-action="CreateCourse">Create New</a>
         </p>
         <table id="tblList" class="table">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.CourseName)
+                        Course
                     </th>
                     <th>
-                        Course Facilitator
+                        Facilitator
                     </th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    var user = userManager.FindByIdAsync(item.FacilitatorId).Result;
                     <tr>
                         <td>
                             @Html.DisplayFor(modelItem => item.CourseName)
                         </td>
                         @if (item.FacilitatorId != null)
                         {
+                            var facilitator = userManager.FindByIdAsync(item.FacilitatorId).Result;
                             <td>
-                                @user.FirstName @user.LastName @user.MiddleName
+                                @facilitator.FirstName @facilitator.LastName @facilitator.MiddleName
                             </td>
                         }
                         else
@@ -41,11 +40,6 @@
                             <td>
                             </td>
                         }
-                        <td>
-                            <a asp-action="EditCourse" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        </td>
                     </tr>
                 }
             </tbody>

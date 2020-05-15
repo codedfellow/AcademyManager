@@ -3,5 +3,13 @@
 
 // Write your JavaScript code.
 $(document).ready(function () {
-    $('#tblList').DataTable();
+    $('#tblList').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        "responsive": true,
+    });
 });

@@ -1,0 +1,55 @@
+﻿@model GeneralCourseDetailsVM
+@inject AcademyManager.Contracts.IScoresRepository scoresRepo
+@inject AcademyManager.Contracts.ITestsAndExamsRepository testsAndExamsRepo
+@inject UserManager<AMUser> user
+@{
+    ViewData["Title"] = "GeneralCourseDetails";
+}
+
+<h1>General Course Details</h1>
+<ul>
+    @foreach (var item in Model.Scores)
+    {
+        for (int i = 0; i < item.Count; i++)
+        {
+            <li>
+                @{ 
+                    var trainee = user.FindByIdAsync(item[i].TraineeId).Result;
+                    var testOrExam = testsAndExamsRepo.FindById(item[i].TestOrExamId);
+                }
+                <p>@trainee.FirstName @trainee.LastName @trainee.MiddleName</p>
+                <p>@testOrExam.TestOrExamName</p>
+                <p>@item[i].Score</p>
+            </li>
+        }
+    }
+</ul>
+
+@*<table class="table">
+    <thead>
+        <tr>
+            @foreach (var item in Model.Scores)
+            {
+                var testOrExam = testsAndExamsRepo.FindById(item[i].TestOrExamId);
+                <th>
+                    @testOrExam.TestOrExamName
+                </th>
+                for (int i = 0; i < item.Count; i++)
+                {
+
+                }
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.CourseId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+</table>*@

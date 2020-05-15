@@ -3,12 +3,9 @@
     ViewData["Title"] = "ViewCourseTestsAndExams";
 }
 <div class="container-fluid">
-    <h1>View CourseTestsAndExams</h1>
+    <h1>View Course Tests and Exams</h1>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
+    <table id="tblList" class="table">
         <thead>
             <tr>
                 <th>
@@ -26,14 +23,21 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.TestOrExamName)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Total)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        <a class="btn bg-gradient-maroon" asp-action="ListTraineesForTest" asp-route-testOrExamId="@item.Id">
+                            <i class="fas fa-edit"></i>Edit Scores
+                        </a>
+                        <a class="btn btn-info" asp-action="EditTestsOrExam" asp-route-testOrExamId="@item.Id">
+                        <i class="fas fa-pen-alt"></i>
+                            Edit Test or Exam
+                        </a>
+                        <a class="btn btn-secondary" asp-action="ViewTraineesScores" asp-route-testOrExamId="@item.Id">
+                            <i class="fas fa-info-circle"></i>
+                            View Trainees Scores
+                        </a>
                     </td>
                 </tr>
             }

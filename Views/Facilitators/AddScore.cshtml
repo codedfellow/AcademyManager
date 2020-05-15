@@ -1,0 +1,39 @@
+﻿@model AcademyManager.ViewModels.ScoresVM
+@inject AcademyManager.Contracts.ITestsAndExamsRepository testsRepo
+@inject UserManager<AMUser> userManager
+@{ 
+    var testOrExam = testsRepo.FindById(Model.TestOrExamId);
+    var trainee = userManager.FindByIdAsync(Model.TraineeId).Result;
+}
+<div class="container-fluid">
+    <h1>Add Score for @trainee.FirstName @trainee.LastName @trainee.MiddleName</h1>
+    <h4>Total: @testOrExam.Total</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AddScore">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="TraineeId" type="hidden" />
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="TestOrExamId"/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Score" class="control-label"></label>
+                    <input asp-for="Score" class="form-control" />
+                    <span asp-validation-for="Score" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Add Score" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+
+</div>

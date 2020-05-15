@@ -10,13 +10,13 @@ namespace AcademyManager.ViewModels
     {
         public string Id { get; set; }
         public string Email { get; set; }
-        [Display(Name = "First name:")]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
-        [Display(Name = "Last name:")]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
-        [Display(Name = "Middle name:")]
+        [Display(Name = "Middle name")]
         public string MiddleName { get; set; }
-        [Display(Name = "Phone:")]
+        [Display(Name = "Phone")]
         public string PhoneNumber { get; set; }
         public string PictureUrl { get; set; }
         public string StudentId { get; set; }

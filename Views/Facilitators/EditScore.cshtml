@@ -1,0 +1,39 @@
+﻿@model AcademyManager.ViewModels.ScoresVM
+@inject UserManager<AMUser> userManager
+@{
+    ViewData["Title"] = "EditScore";
+    var trainee = userManager.FindByIdAsync(Model.TraineeId).Result;
+}
+
+    <h1>Edit Score for @trainee.FirstName @trainee.LastName @trainee.MiddleName</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditScore">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input asp-for="Id" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input asp-for="TraineeId" type="hidden" />
+            </div>
+            <div class="form-group">
+                <input asp-for="TestOrExamId" type="hidden" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Score" class="control-label"></label>
+                <input asp-for="Score" class="form-control" />
+                <span asp-validation-for="Score" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update Score" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="ManageCourses">Back to Manage Courses</a>
+</div>
+

@@ -13,4 +13,10 @@ namespace AcademyManager.ViewModels
         public int CourseId { get; set; }
         public int Total { get; set; }
     }
+
+    public class ListTraineesForTestVM
+    {
+        public TestAndExamVM TestOrExam { get; set; }
+        public List<TraineeVM> TraineesForTest { get; set; }
+    }
 }

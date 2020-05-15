@@ -3,22 +3,28 @@
     ViewData["Title"] = "Index";
 }
 
-    <div class="container-fluid">
+    <div>
         <h1>Admin Portal</h1>
         <table class="table">
             <tr>
-                <td><a class="btn btn-info" asp-action="Index" asp-controller="Trainees">Trainees List</a></td>
+                <td><a class="btn btn-info" asp-action="TraineesList" asp-controller="Administrators">Trainees List</a></td>
                 <td><a class="btn btn-info" asp-action="Index" asp-controller="Administrators">Administrators List</a></td>
-                <td><a class="btn btn-info" asp-action="Index" asp-controller="Facilitators">Facilitators List</a></td>
+                <td><a class="btn btn-info" asp-action="FacilitatorsList" asp-controller="Administrators">Facilitators List</a></td>
             </tr>
             <tr>
-                <td><a class="btn btn-info" asp-action="AssignTraineeSerial" asp-controller="Trainees">Generate trainees Serial</a></td>
-                <td><a class="btn btn-info" asp-action="CreateCourse" asp-controller="Courses">Create course</a></td>
-                <td><a class="btn btn-info" asp-action="Index" asp-controller="Courses">Course List</a></td>
+                <td><a class="btn bg-gradient-maroon" asp-action="AssignTraineeSerial" asp-controller="Administrators">Generate trainees Serial</a></td>
+                <td><a class="btn bg-gradient-maroon" asp-action="CreateCourse" asp-controller="Administrators">Create course</a></td>
+                <td><a class="btn bg-gradient-maroon" asp-action="CourseList" asp-controller="Administrators">Course List</a></td>
+            </tr>
+            <tr>
+                <td><a class="btn btn-info" asp-action="CreateTrainees" asp-controller="Administrators">Create Trainees</a></td>
+                <td><a class="btn btn-info" asp-action="CreateFacilitators" asp-controller="Administrators">Create Facilitators</a></td>
+                <td><a class="btn btn-info" asp-action="CreateAdministrators" asp-controller="Administrators">Create Administrators</a></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a asp-action="AllUsersList" asp-controller="Administrators" class="btn bg-gradient-maroon">All App Users List</a></td>
+                <td></td>
             </tr>
         </table>
-        <hr />
-        <h4>Create Trainees <a class="btn btn-blue" asp-action="CreateTrainees" asp-controller="Trainees">Create</a></h4>
-        <h4>Create Facilitators <a class="btn btn-blue" asp-action="CreateFacilitators" asp-controller="Facilitators">Create</a></h4>
-        <h4>Create Administrators <a class="btn btn-blue" asp-action="CreateAdministrators" asp-controller="Administrators">Create</a></h4>
     </div>

@@ -1,0 +1,62 @@
+﻿@model ListTraineesForTestVM
+@inject AcademyManager.Contracts.IScoresRepository _scoresRepo
+@{
+    ViewData["Title"] = "ListTraineesForTest";
+}
+    <div class="container-fluid">
+        <h1>List Trainees For @Model.TestOrExam.TestOrExamName</h1>
+        <p>
+            <a asp-action="Create">Create New</a>
+        </p>
+        <table id="tblList" class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Trainee Id
+                    </th>
+                    <th>
+                        First Name
+                    </th>
+                    <th>
+                        Middle Name
+                    </th>
+                    <th>
+                        Last Name
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.TraineesForTest)
+                {
+                    var scoresFound = _scoresRepo.GetScoreByTestAndExamIdAndTraineeId(Model.TestOrExam.Id, item.Id);
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TraineeId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MiddleName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @if (scoresFound == null)
+                            {
+                                <a class="btn btn-secondary" asp-action="AddScore" asp-route-testOrExamId="@Model.TestOrExam.Id" asp-route-traineeId="@item.Id">Add Score</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-secondary" asp-action="EditScore" asp-route-testOrExamId="@Model.TestOrExam.Id" asp-route-traineeId="@item.Id">Edit Score</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <a asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.TestOrExam.CourseId" class="btn bg-gradient-maroon mr-2">Back</a>
+        <a asp-action="ViewTraineesScores" asp-route-testOrExamId="@Model.TestOrExam.Id" class="btn btn-info text-white mr-2">View Test Scores</a>
+    </div>

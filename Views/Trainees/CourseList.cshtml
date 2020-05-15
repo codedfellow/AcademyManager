@@ -1,0 +1,50 @@
+﻿@model IEnumerable<AcademyManager.ViewModels.CourseVM>
+@inject UserManager<AMUser> userManager
+@{
+    ViewData["Title"] = "CourseList";
+}
+
+<h1>Course List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table id="tblList" class="table">
+    <thead>
+        <tr>
+            <th>
+                Course Name
+            </th>
+            <th>
+                Course Facilitator
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+    
+    
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CourseName)
+            </td>
+            @if (item.FacilitatorId != null)
+            {
+                var facilitator = userManager.FindByIdAsync(item.FacilitatorId).Result;
+                <td>
+                    @facilitator.FirstName @facilitator.LastName @facilitator.MiddleName
+                </td>
+            }
+            else
+            {
+                <td></td>
+            }
+        <td>
+            <a asp-action="GeneralCourseDetails" asp-route-courseId="@item.Id" class="btn bg-gradient-lightblue text-light">General Course Details</a>
+            <a class="btn bg-gradient-maroon text-light">Personal Course Details</a>
+        </td>
+        </tr>
+}
+    </tbody>
+</table>

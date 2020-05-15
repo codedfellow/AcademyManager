@@ -6,12 +6,14 @@ using AcademyManager.Contracts;
 using AcademyManager.Models;
 using AcademyManager.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AcademyManager.Controllers
 {
+    [Authorize(Roles = "Trainee")]
     public class TraineesController : Controller
     {
         private readonly UserManager<AMUser> _userManager;
@@ -19,15 +21,22 @@ namespace AcademyManager.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
         private readonly ISerialStoreRepository _serialStore;
+        private readonly ICoursesRepository _coursesRepository;
+        private readonly IScoresRepository _scoresRepository;
+        private readonly ITestsAndExamsRepository _testsAndExamsRepository;
 
         public TraineesController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager, RoleManager<IdentityRole> roleManager,
-            IMapper mapper, ISerialStoreRepository serialStore)
+            IMapper mapper, ISerialStoreRepository serialStore, ICoursesRepository coursesRepository,
+            IScoresRepository scoresRepository, ITestsAndExamsRepository testsAndExamsRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _serialStore = serialStore;
+            _coursesRepository = coursesRepository;
+            _scoresRepository = scoresRepository;
+            _testsAndExamsRepository = testsAndExamsRepository;
         }
         // GET: Students
         public async Task<IActionResult> Index()
@@ -37,134 +46,39 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
-        // GET: Students/Details/5
-        public ActionResult Details(int id)
+        public IActionResult CourseList()
         {
-            return View();
-        }
-
-        // GET: Students/Create
-        [HttpGet]
-        public async Task<IActionResult> CreateTrainees()
-        {
-            var appUsers = _userManager.Users.AsEnumerable().ToList();
-            List<AMUser> toBeSelected = new List<AMUser>();
-            for (int i = 0; i < appUsers.Count; i++)
-            {
-                if (!(await _userManager.IsInRoleAsync(appUsers[i], "Administrator"))
-                    && !(await _userManager.IsInRoleAsync(appUsers[i], "Trainee"))
-                    && !(await _userManager.IsInRoleAsync(appUsers[i], "Facilitator")))
-                {
-                    toBeSelected.Add(appUsers[i]);
-                    continue;
-                }
-                else
-                    continue;
-            }
-            var model = _mapper.Map<List<AMUser>,List<TraineesVM>>(toBeSelected);
+            var courses = _coursesRepository.FindAll().ToList();
+            var model = _mapper.Map<List<CourseVM>>(courses);
             return View(model);
         }
 
-        // POST: Students/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateTrainees(List<TraineesVM> model)
+        public IActionResult GeneralCourseDetails(int courseId)
         {
-            if (ModelState.IsValid)
+            var courseTestsAndExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
+            var scoresList = new List<List<ScoresVM>>();
+            if (courseTestsAndExams.Count > 0)
             {
-                for (int i = 0; i < model.Count; i++)
+                for (int i = 0; i < courseTestsAndExams.Count; i++)
                 {
-                    if (model[i].IsSelected)
+                    var scores = _scoresRepository.GetScoreByTestOrExamId(courseTestsAndExams[i].Id).ToList();
+                    if (scores.Count > 0 )
                     {
-                        var user = await _userManager.FindByIdAsync(model[i].Id);
-                        var result = await _userManager.AddToRoleAsync(user, "Trainee");
-                        if (result.Succeeded)
-                        {
-                            continue;
-                        }
-                        else if (!(result.Succeeded))
-                        {
-                            ModelState.AddModelError("", "An error occured while creating the students");
-                            return View(model);
-                        }
+                        var scoreModel = _mapper.Map<List<ScoresVM>>(scores);
+                        scoresList.Add(scoreModel);
                     }
                     else
+                    {
                         continue;
+                    }
                 }
-                return RedirectToAction("Index","AdminPortal");
             }
-            else
+            var model = new GeneralCourseDetailsVM
             {
-                ModelState.AddModelError("", "An error occured");
-                return View(model);
-            }
-        }
-
-        public async Task<IActionResult> GenerateSerial(string Id)
-        {
-            var user = await _userManager.FindByIdAsync(Id);
-            var serial = _serialStore.FindById(1);
-            int serialNum = serial.Serial;
-            var serialCount = serialNum + 1;
-            var fullSerial = "STD" + serialCount.ToString();
-            user.TraineeId = fullSerial;
-            serial.Serial = serialCount;
-            _serialStore.Update(serial);
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("AssignTraineeSerial");
-            }
-            return View("Error");
-        }
-
-        public async Task<IActionResult> AssignTraineeSerial()
-        {
-            var trainees = await _userManager.GetUsersInRoleAsync("Trainee");
-            var toBeAssigned = trainees.Where(p => p.TraineeId == null).ToList();
-            var model = _mapper.Map<List<TraineesVM>>(toBeAssigned);
+                CourseId = courseId,
+                Scores = scoresList
+            };
             return View(model);
-        }
-        // GET: Students/Edit/5
-        
-        // POST: Students/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Students/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Students/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

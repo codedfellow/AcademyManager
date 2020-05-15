@@ -6,10 +6,10 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <li class="nav-item">
-        <a  class="btn c-blue pr-4" asp-action="index" asp-controller="home">Hello @User.Identity.Name!</a>
+        <a  class="btn c-blue pr-4" asp-action="index" asp-controller="UserProfile">@User.Identity.Name!</a>
     </li>
     <li class="nav-item">
-        <form method="post"  class="form-inline" asp-action="logout" asp-controller="useraccounts" >
+        <form method="post"  class="form-inline" asp-action="logout" asp-controller="Account" >
             <button  type="submit" class="btn c-blue">Logout</button>
         </form>
     </li>
@@ -17,10 +17,10 @@
 else
 {
     <li class="nav-item">
-        <a class="c-blue pr-4" asp-controller="UserAccounts" asp-action="Register">Register</a>
+        <a class="c-blue pr-4" asp-controller="Account" asp-action="Register">Register</a>
     </li>
     <li class="nav-item">
-        <a class="c-blue" asp-controller="UserAccounts" asp-action="Login">Login</a>
+        <a class="c-blue" asp-controller="Account" asp-action="Login">Login</a>
     </li>
 }
 </ul>

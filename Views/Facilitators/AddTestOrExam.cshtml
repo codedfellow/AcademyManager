@@ -4,33 +4,35 @@
     ViewData["Title"] = "AddTestOrExam";
 }
 
-<h1>AddTestOrExam</h1>
 
-<h4>TestAndExamVM</h4>
+
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddTestOrExam">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TestOrExamName" class="control-label"></label>
-                <input asp-for="TestOrExamName" class="form-control" />
-                <span asp-validation-for="TestOrExamName" class="text-danger"></span>
-            </div>
-            <input asp-for="CourseId" type="hidden" />
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="card card-maroon">
+        <div class="card-header"><h1>Add Test Or Exam</h1></div>
+        <div class="card-body">
+            <form asp-action="AddTestOrExam">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="TestOrExamName" class="control-label"></label>
+                    <input asp-for="TestOrExamName" class="form-control" />
+                    <span asp-validation-for="TestOrExamName" class="text-danger"></span>
+                </div>
+                <input asp-for="CourseId" type="hidden" />
+                <div class="form-group">
+                    <label asp-for="Total" class="control-label"></label>
+                    <input asp-for="Total" class="form-control" />
+                    <span asp-validation-for="Total" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn bg-info" asp-action="ManageCourses">Go back to Manage Courses</a>
 </div>
 

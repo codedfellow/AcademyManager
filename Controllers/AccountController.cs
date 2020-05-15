@@ -10,13 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AcademyManager.Controllers
 {
-    public class UserAccountsController : Controller
+    public class AccountController : Controller
     {
         private readonly UserManager<AMUser> userManager;
         private readonly SignInManager<AMUser> signInManager;
         private readonly IMapper mapper;
 
-        public UserAccountsController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager,
+        public AccountController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager,
             IMapper mapper)
         {
             this.userManager = userManager;
@@ -92,6 +92,11 @@ namespace AcademyManager.Controllers
             {
                 return Json($"Email {email} is already in use");
             }
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

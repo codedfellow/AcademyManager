@@ -6,11 +6,13 @@ using AcademyManager.Contracts;
 using AcademyManager.Models;
 using AcademyManager.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AcademyManager.Controllers
 {
+    [Authorize(Roles = "Facilitator")]
     public class FacilitatorsController : Controller
     {
         private readonly UserManager<AMUser> _userManager;
@@ -19,9 +21,12 @@ namespace AcademyManager.Controllers
         private readonly IMapper _mapper;
         private readonly ICoursesRepository _coursesRepository;
         private readonly ITestsAndExamsRepository _testsAndExamsRepository;
+        private readonly IScoresRepository _scoresRepository;
 
-        public FacilitatorsController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager, RoleManager<IdentityRole> roleManager,
-            IMapper mapper, ICoursesRepository coursesRepository, ITestsAndExamsRepository testsAndExamsRepository)
+        public FacilitatorsController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager, 
+            RoleManager<IdentityRole> roleManager,
+            IMapper mapper, ICoursesRepository coursesRepository, ITestsAndExamsRepository testsAndExamsRepository,
+            IScoresRepository scoresRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -29,6 +34,7 @@ namespace AcademyManager.Controllers
             _mapper = mapper;
             _coursesRepository = coursesRepository;
             _testsAndExamsRepository = testsAndExamsRepository;
+            _scoresRepository = scoresRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -37,59 +43,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CreateFacilitators(int id)
-        {
-            var appUsers = _userManager.Users.AsEnumerable().Where(p => p.UserName != "admin@localhost.com").ToList();
-            List<AMUser> toBeSelected = new List<AMUser>();
-            for (int i = 0; i < appUsers.Count; i++)
-            {
-                if (!(await _userManager.IsInRoleAsync(appUsers[i], "Trainee"))
-                    && !(await _userManager.IsInRoleAsync(appUsers[i], "Facilitator")))
-                {
-                    toBeSelected.Add(appUsers[i]);
-                    continue;
-                }
-                else
-                    continue;
-            }
-            var model = _mapper.Map<List<AMUser>, List<FacilitatorsVM>>(toBeSelected);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateFacilitators(List<FacilitatorsVM> model)
-        {
-            if (ModelState.IsValid)
-            {
-                for (int i = 0; i < model.Count; i++)
-                {
-                    if (model[i].IsSelected)
-                    {
-                        var user = await _userManager.FindByIdAsync(model[i].Id);
-                        var result = await _userManager.AddToRoleAsync(user, "Facilitator");
-                        if (result.Succeeded)
-                        {
-                            continue;
-                        }
-                        else if (!(result.Succeeded))
-                        {
-                            ModelState.AddModelError("", "An error occured while creating the facilitators");
-                            return View(model);
-                        }
-                    }
-                    else
-                        continue;
-                }
-                return RedirectToAction("Index", "AdminPortal");
-            }
-            else
-            {
-                ModelState.AddModelError("", "An error occured");
-                return View(model);
-            }
-        }
+        
 
         public IActionResult ManageCourses()
         {
@@ -148,6 +102,39 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult EditTestsOrExam(int testOrExamId)
+        {
+            var testOrExam = _testsAndExamsRepository.FindById(testOrExamId);
+            if (testOrExam == null)
+            {
+                return View("Error", "Home");
+            }
+            var model = _mapper.Map<TestAndExamVM>(testOrExam);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditTestsOrExam(TestAndExamVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var testOrExam = _testsAndExamsRepository.FindById(model.Id);
+                if (testOrExam != null)
+                {
+                    testOrExam.TestOrExamName = model.TestOrExamName;
+                    testOrExam.Total = model.Total;
+                    var isSuccess = _testsAndExamsRepository.Update(testOrExam);
+                    if (isSuccess)
+                    {
+                        return RedirectToAction("ViewCourseTestsAndExams", new { courseId = testOrExam.CourseId });
+                    }
+                }
+                return View("Error", "Home");
+            }
+            return View(model);
+        }
+        
         public IActionResult ViewCourseDetails(int courseId)
         {
             var course = _coursesRepository.FindById(courseId);
@@ -163,6 +150,94 @@ namespace AcademyManager.Controllers
         {
             var courseTestsAndExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
             var model = _mapper.Map<List<TestAndExamVM>>(courseTestsAndExams);
+            return View(model);
+        }
+
+        public IActionResult ListTraineesForTest(int testOrExamId)
+        {
+            var trainees = _userManager.GetUsersInRoleAsync("Trainee").Result.ToList();
+            var testOrExam = _testsAndExamsRepository.FindById(testOrExamId);
+            var course = _coursesRepository.FindById(testOrExam.CourseId);
+            var courseVM = _mapper.Map<CourseVM>(course);
+            var testOrExamModel = _mapper.Map<TestAndExamVM>(testOrExam);
+            testOrExamModel.Course = courseVM;
+            var traineesModel = _mapper.Map<List<TraineeVM>>(trainees);
+            var model = new ListTraineesForTestVM
+            {
+                TestOrExam = testOrExamModel,
+                TraineesForTest = traineesModel
+            };
+            return View(model);
+        }
+
+        public IActionResult ViewTraineesScores(int testOrExamId)
+        {
+            var scoresforTestOrExam = _scoresRepository.GetScoreByTestOrExamId(testOrExamId).ToList();
+            var model = _mapper.Map<List<ScoresVM>>(scoresforTestOrExam);
+            return View(model);
+        }
+
+        public IActionResult AddScore(int testOrExamId, string traineeId)
+        {
+            var model = new ScoresVM
+            {
+                TestOrExamId = testOrExamId,
+                TraineeId = traineeId
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AddScore(ScoresVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var testOrExam = _testsAndExamsRepository.FindById(model.TestOrExamId);
+                if (model.Score > testOrExam.Total)
+                {
+                    ModelState.AddModelError("", "The value of the trainee's score cannot be higher than the total score");
+                    return View(model);
+                }
+                var score = _mapper.Map<Scores>(model);
+                var isSuccess = _scoresRepository.Create(score);
+                if (!isSuccess)
+                {
+                    return View("Error","Home");
+                }
+                return RedirectToAction("ListTraineesForTest", new { testOrExamId = score.TestOrExamId});
+            }
+            ModelState.AddModelError("", "FIll all the fields properly");
+            return View(model);
+        }
+
+        public IActionResult EditScore(int testOrExamId, string traineeId)
+        {
+            var score = _scoresRepository.GetScoreByTestAndExamIdAndTraineeId(testOrExamId, traineeId);
+            var model = _mapper.Map<ScoresVM>(score);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult EditScore(ScoresVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                var testOrExam = _testsAndExamsRepository.FindById(model.TestOrExamId);
+                if (model.Score > testOrExam.Total)
+                {
+                    ModelState.AddModelError("", "The value of the trainee's score cannot be higher than the total score");
+                    return View(model);
+                }
+                var score = _scoresRepository.FindById(model.Id);
+                score.Score = model.Score;
+                var isSuccess = _scoresRepository.Update(score);
+                if (!isSuccess)
+                {
+                    return View("Error", "Home");
+                }
+                return RedirectToAction("ListTraineesForTest", new { testOrExamId = score.TestOrExamId });
+            }
+            ModelState.AddModelError("", "FIll all the fields properly");
             return View(model);
         }
     }
