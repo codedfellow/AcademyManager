@@ -2,13 +2,14 @@
 
 @{
     ViewData["Title"] = "EditProfile";
+    var photoPath = "~/images/" + (Model.PictureUrl ?? "noimage.png");
 }
 <div class="container-fluid">
     <h1>Edit Profile</h1>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="EditProfile">
+            <form asp-action="EditProfile" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" disabled asp-for="Id" />
                 <div class="form-group">
@@ -36,15 +37,18 @@
                     <input asp-for="PhoneNumber" class="form-control" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
-                @*<div class="form-group row">
-                        <label asp-for="Picture" class="col-sm-2 col-form-label"></label>
-                        <div class="col-sm-10">
-                            <div class="custom-file">
-                                <input asp-for="Picture" class="form-control custom-file-input" />
-                                <label class="custom-file-label">Click here to change photo</label>
-                            </div>
+                <div class="form-group row col-sm-3 offset-4">
+                    <img src="@photoPath" style="height: 150px; width: auto;" class="imageThumbnail" asp-append-version="true" />
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Picture" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <div class="custom-file">
+                            <input asp-for="Picture" class="form-control custom-file-input" />
+                            <label class="custom-file-label">Click here to change photo</label>
                         </div>
-                    </div>*@
+                    </div>
+                </div>
                 <input hidden asp-for="PictureUrl" class="form-control" />
                 <div class="form-group">
                     <input type="submit" value="Save" class="btn btn-primary" />
@@ -54,11 +58,19 @@
     </div>
 
     <div>
-        <a class="btn bg-gradient-maroon" asp-action="Index">Back to Profile Page</a>
+        <a class="btn bg-gradient-indigo" asp-action="Index">Back to Profile Page</a>
     </div>
 </div>
 
 
 @section Scripts {
+    <script>
+                $(document).ready(function () {
+                    $('.custom-file-input').on("change", function () {
+                        var fileName = $(this).val().split("\\").pop();
+                        $(this).next('.custom-file-label').html(fileName);
+                    });
+                })
+    </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -53,6 +54,6 @@ namespace AcademyManager.ViewModels
         [Phone]
         public string PhoneNumber { get; set; }
         public string PictureUrl { get; set; }
-        //public IFormFile Picture { get; set; }
+        public IFormFile Picture { get; set; }
     }
 }

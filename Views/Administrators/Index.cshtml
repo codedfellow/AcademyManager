@@ -3,12 +3,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-    <div class="container-fluid">
         <h1>Administrators List</h1>
 
-        <p>
-            <a asp-action="Create">Create New</a>
-        </p>
         <table id="tblList" class="table">
             <thead>
                 <tr>
@@ -54,4 +50,4 @@
                 }
             </tbody>
         </table>
-    </div>
+        <a class="btn bg-gradient-indigo" asp-controller="AdminPortal" asp-action="Index">Back to Admin Portal</a>

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AcademyManager.Models;
 using AcademyManager.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +20,15 @@ namespace AcademyManager.Controllers
         private readonly IMapper mapper;
         private readonly UserManager<AMUser> userManager;
         private readonly SignInManager<AMUser> signInManager;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public UserProfileController(IMapper mapper, UserManager<AMUser> userManager, SignInManager<AMUser> signInManager)
+        public UserProfileController(IMapper mapper, UserManager<AMUser> userManager, SignInManager<AMUser> signInManager,
+            IWebHostEnvironment hostEnvironment)
         {
             this.mapper = mapper;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            _hostEnvironment = hostEnvironment;
         }
         // GET: /<controller>/
         public async Task<IActionResult> Index()
@@ -81,6 +86,24 @@ namespace AcademyManager.Controllers
                     editedUser.MiddleName = model.MiddleName;
                     editedUser.PhoneNumber = model.PhoneNumber;
                     editedUser.UserName = model.Email;
+                    if (model.Picture != null)
+                    {
+                        if (model.PictureUrl != null)
+                        {
+                            string filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", model.PictureUrl);
+                            System.IO.File.Delete(filePath);
+                        }
+                        editedUser.PictureUrl = ProcessUploadedFile(model);
+                    }
+                    else
+                    {
+                        if (model.PictureUrl != null)
+                        {
+                            string filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", model.PictureUrl);
+                            System.IO.File.Delete(filePath);
+                        }
+                        editedUser.PictureUrl = null;
+                    }
                     var result = await userManager.UpdateAsync(editedUser);
                     if (result.Succeeded)
                     {
@@ -94,7 +117,24 @@ namespace AcademyManager.Controllers
                 }
             }
         }
+        private string ProcessUploadedFile(EditProfileVM model)
+        {
+            string uniqueFileName = null;
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath + "/images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using var fileStream = new FileStream(filePath, FileMode.Create);
+                model.Picture.CopyTo(fileStream);
+            }
+            else
+            {
+                return uniqueFileName;
+            }
 
+            return uniqueFileName;
+        }
         [HttpGet]
         public async Task<IActionResult> ChangePassword(string id)
         {

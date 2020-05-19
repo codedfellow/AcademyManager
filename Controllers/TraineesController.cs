@@ -17,23 +17,17 @@ namespace AcademyManager.Controllers
     public class TraineesController : Controller
     {
         private readonly UserManager<AMUser> _userManager;
-        private readonly SignInManager<AMUser> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
-        private readonly ISerialStoreRepository _serialStore;
         private readonly ICoursesRepository _coursesRepository;
         private readonly IScoresRepository _scoresRepository;
         private readonly ITestsAndExamsRepository _testsAndExamsRepository;
 
-        public TraineesController(UserManager<AMUser> userManager, SignInManager<AMUser> signInManager, RoleManager<IdentityRole> roleManager,
-            IMapper mapper, ISerialStoreRepository serialStore, ICoursesRepository coursesRepository,
+        public TraineesController(UserManager<AMUser> userManager,
+            IMapper mapper, ICoursesRepository coursesRepository,
             IScoresRepository scoresRepository, ITestsAndExamsRepository testsAndExamsRepository)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
             _mapper = mapper;
-            _serialStore = serialStore;
             _coursesRepository = coursesRepository;
             _scoresRepository = scoresRepository;
             _testsAndExamsRepository = testsAndExamsRepository;
@@ -56,7 +50,7 @@ namespace AcademyManager.Controllers
         public IActionResult GeneralCourseDetails(int courseId)
         {
             var courseTestsAndExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
-            var scoresList = new List<List<ScoresVM>>();
+            var scoresList = new List<CurrentTestOrExamVM>();
             if (courseTestsAndExams.Count > 0)
             {
                 for (int i = 0; i < courseTestsAndExams.Count; i++)
@@ -65,7 +59,12 @@ namespace AcademyManager.Controllers
                     if (scores.Count > 0 )
                     {
                         var scoreModel = _mapper.Map<List<ScoresVM>>(scores);
-                        scoresList.Add(scoreModel);
+                        var selected = new CurrentTestOrExamVM
+                        {
+                            TestOrExamId = courseTestsAndExams[i].Id,
+                            Scores = scoreModel
+                        };
+                        scoresList.Add(selected);
                     }
                     else
                     {
@@ -76,7 +75,29 @@ namespace AcademyManager.Controllers
             var model = new GeneralCourseDetailsVM
             {
                 CourseId = courseId,
-                Scores = scoresList
+                TestsOrExams = scoresList
+            };
+            return View(model);
+        }
+
+        public IActionResult PersonalCourseDetails(int courseId)
+        {
+            var courseTestsOrExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
+            var scores = new List<ScoresVM>();
+            var trainee = _userManager.GetUserAsync(User).Result;
+            if (courseTestsOrExams.Count > 0)
+            {
+                for (int i = 0; i < courseTestsOrExams.Count; i++)
+                {
+                    var score = _scoresRepository.GetScoreByTestAndExamIdAndTraineeId(courseTestsOrExams[i].Id, trainee.Id);
+                    var scoreModel = _mapper.Map<ScoresVM>(score);
+                    scores.Add(scoreModel);
+                }
+            }
+            var model = new PersonalCourseDetailsVM
+            {
+                CourseId = courseId,
+                Scores = scores
             };
             return View(model);
         }

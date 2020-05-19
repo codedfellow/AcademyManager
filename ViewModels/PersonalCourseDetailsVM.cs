@@ -5,15 +5,9 @@ using System.Threading.Tasks;
 
 namespace AcademyManager.ViewModels
 {
-    public class GeneralCourseDetailsVM
+    public class PersonalCourseDetailsVM
     {
         public int CourseId { get; set; }
-        public List<CurrentTestOrExamVM> TestsOrExams { get; set; }
-    }
-
-    public class CurrentTestOrExamVM
-    {
-        public int TestOrExamId { get; set; }
         public List<ScoresVM> Scores { get; set; }
     }
 }

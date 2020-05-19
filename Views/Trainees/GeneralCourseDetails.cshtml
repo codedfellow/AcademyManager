@@ -7,24 +7,27 @@
 }
 
 <h1>General Course Details</h1>
-<ul>
-    @foreach (var item in Model.Scores)
+<div class="row">
+    @foreach (var item in Model.TestsOrExams)
     {
-        for (int i = 0; i < item.Count; i++)
-        {
-            <li>
-                @{ 
-                    var trainee = user.FindByIdAsync(item[i].TraineeId).Result;
-                    var testOrExam = testsAndExamsRepo.FindById(item[i].TestOrExamId);
-                }
-                <p>@trainee.FirstName @trainee.LastName @trainee.MiddleName</p>
-                <p>@testOrExam.TestOrExamName</p>
-                <p>@item[i].Score</p>
-            </li>
+    <div class="card col-sm-6 mb-2 col-12">
+        @{
+            var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
+                <div class="card-header">
+                    <h4 class="card-title">@testOrExam.TestOrExamName</h4>
+                </div>
+            var scores = item.Scores;
+            for (int i = 0; i < scores.Count; i++)
+            {
+                var trainee = user.FindByIdAsync(scores[i].TraineeId).Result;
+            <div class="card-body">
+                <p class="card-text"><b>@trainee.FirstName @trainee.LastName @trainee.MiddleName</b> - @scores[i].Score</p>
+            </div>
+            }
         }
+    </div>
     }
-</ul>
-
+</div>
 @*<table class="table">
     <thead>
         <tr>

@@ -84,7 +84,7 @@ namespace AcademyManager.Controllers
                     else
                         continue;
                 }
-                return RedirectToAction("Index", "AdminPortal");
+                return RedirectToAction("Index", "Administrators");
             }
             else
             {
@@ -138,7 +138,7 @@ namespace AcademyManager.Controllers
                     else
                         continue;
                 }
-                return RedirectToAction("Index", "AdminPortal");
+                return RedirectToAction("FacilitatorsList");
             }
             else
             {
@@ -194,7 +194,7 @@ namespace AcademyManager.Controllers
                     else
                         continue;
                 }
-                return RedirectToAction("Index", "AdminPortal");
+                return RedirectToAction("TraineesList");
             }
             else
             {

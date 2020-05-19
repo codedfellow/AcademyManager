@@ -6,9 +6,6 @@
 
 <h1>Course List</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table id="tblList" class="table">
     <thead>
         <tr>
@@ -41,8 +38,8 @@
                 <td></td>
             }
         <td>
-            <a asp-action="GeneralCourseDetails" asp-route-courseId="@item.Id" class="btn bg-gradient-lightblue text-light">General Course Details</a>
-            <a class="btn bg-gradient-maroon text-light">Personal Course Details</a>
+            <a asp-action="GeneralCourseDetails" asp-route-courseId="@item.Id" class="btn m-2 bg-gradient-lightblue text-light">General Course Details</a>
+            <a asp-action="PersonalCourseDetails" asp-route-courseId="@item.Id" class="btn m-2 bg-gradient-indigo text-light">Personal Course Details</a>
         </td>
         </tr>
 }
