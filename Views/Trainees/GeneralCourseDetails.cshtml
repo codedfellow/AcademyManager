@@ -10,49 +10,37 @@
 <div class="row">
     @foreach (var item in Model.TestsOrExams)
     {
-    <div class="card col-sm-6 mb-2 col-12">
-        @{
-            var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
+        <div class="card col-sm-6 mb-2 col-12">
+            @{
+                var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
+            }
                 <div class="card-header">
                     <h4 class="card-title">@testOrExam.TestOrExamName</h4>
                 </div>
-            var scores = item.Scores;
-            for (int i = 0; i < scores.Count; i++)
-            {
-                var trainee = user.FindByIdAsync(scores[i].TraineeId).Result;
-            <div class="card-body">
-                <p class="card-text"><b>@trainee.FirstName @trainee.LastName @trainee.MiddleName</b> - @scores[i].Score</p>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Trainee</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var scores = item.Scores;
+                                for (int i = 0; i < scores.Count; i++)
+                                {
+                                    var trainee = user.FindByIdAsync(scores[i].TraineeId).Result;
+
+                                    <tr>
+                                        <td><b>@trainee.FirstName @trainee.LastName @trainee.MiddleName</b></td>
+                                        <td>@scores[i].Score</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
             }
-        }
-    </div>
-    }
-</div>
-@*<table class="table">
-    <thead>
-        <tr>
-            @foreach (var item in Model.Scores)
-            {
-                var testOrExam = testsAndExamsRepo.FindById(item[i].TestOrExamId);
-                <th>
-                    @testOrExam.TestOrExamName
-                </th>
-                for (int i = 0; i < item.Count; i++)
-                {
-
-                }
-            }
-            <th>
-                @Html.DisplayNameFor(model => model.CourseId)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-</table>*@
+        </div>
