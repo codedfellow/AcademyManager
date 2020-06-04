@@ -7,36 +7,43 @@
         <h1>Create Administrators</h1>
         @if (Model.Count > 0)
         {
-            <form method="post" class="form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div>
-                    <table class="table table-striped">
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            <tr>
-                                <td class="col">
-                                    <input asp-for="@Model[i].Id" type="hidden" />@Model[i].FirstName @Model[i].LastName @Model[i].MiddleName
-                                    <input asp-for="@Model[i].FirstName" type="hidden" />
-                                    <input asp-for="@Model[i].MiddleName" type="hidden" />
-                                    <input asp-for="@Model[i].LastName" type="hidden" />
-                                    <input asp-for="@Model[i].PhoneNumber" type="hidden" />
-                                </td>
-                                <td class="col">
-                                    <input asp-for="@Model[i].IsSelected" />
-                                </td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-                <input type="submit" class="btn btn-info" onclick="return confirm('Are you sure of the selected users?')"
-                       value="Submit Selected Users As Administrators" />
-            </form>
+            <div class="card">
+                <form method="post" class="form">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div>
+                            <table class="table table-striped">
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr>
+                                        <td class="col">
+                                            <input asp-for="@Model[i].Id" type="hidden" />@Model[i].FirstName @Model[i].LastName @Model[i].MiddleName
+                                            <input asp-for="@Model[i].FirstName" type="hidden" />
+                                            <input asp-for="@Model[i].MiddleName" type="hidden" />
+                                            <input asp-for="@Model[i].LastName" type="hidden" />
+                                            <input asp-for="@Model[i].PhoneNumber" type="hidden" />
+                                        </td>
+                                        <td class="col">
+                                            <input asp-for="@Model[i].IsSelected" />
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                        <input type="submit" class="btn btn-info" onclick="return confirm('Are you sure of the selected users?')"
+                               value="Submit Selected Users As Administrators" />
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn bg-gradient-indigo mt-2" asp-controller="AdminPortal" asp-action="Index">Back to Admin Portal</a>
+                    </div>
+                </form>
+            </div>
         }
         else
         {
             <h2 class="text-danger">There are no users to select as administrators</h2>
         }
-        <a class="btn bg-gradient-indigo mt-2" asp-controller="AdminPortal" asp-action="Index">Back to Admin Portal</a>
+        
     </div>
 
 

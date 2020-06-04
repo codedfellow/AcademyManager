@@ -7,29 +7,33 @@
         @if (Model.Count > 0)
         {
             <form method="post" class="form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div>
-                    <table class="table table-striped">
-                        @for (int i = 0; i < Model.Count; i++)
-                        {
-                            <tr>
-                                <td class="col">
-                                    <input asp-for="@Model[i].Id" type="hidden" />@Model[i].FirstName @Model[i].LastName @Model[i].MiddleName
-                                    <input asp-for="@Model[i].TraineeId" type="hidden" />
-                                    <input asp-for="@Model[i].FirstName" type="hidden" />
-                                    <input asp-for="@Model[i].MiddleName" type="hidden" />
-                                    <input asp-for="@Model[i].LastName" type="hidden" />
-                                    <input asp-for="@Model[i].PhoneNumber" type="hidden" />
-                                </td>
-                                <td class="col">
-                                    <input asp-for="@Model[i].IsSelected" />
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                <div class="card">
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <table class="table table-striped">
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td class="col">
+                                        <input asp-for="@Model[i].Id" type="hidden" />@Model[i].FirstName @Model[i].LastName @Model[i].MiddleName
+                                        <input asp-for="@Model[i].TraineeId" type="hidden" />
+                                        <input asp-for="@Model[i].FirstName" type="hidden" />
+                                        <input asp-for="@Model[i].MiddleName" type="hidden" />
+                                        <input asp-for="@Model[i].LastName" type="hidden" />
+                                        <input asp-for="@Model[i].PhoneNumber" type="hidden" />
+                                    </td>
+                                    <td class="col">
+                                        <input asp-for="@Model[i].IsSelected" />
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
-                <input type="submit" class="btn btn-info" onclick="return confirm('Are you sure of the selected users?')"
-                       value="Submit Selected Users As Students" />
+                <div class="card-footer">
+                    <input type="submit" class="btn btn-info" onclick="return confirm('Are you sure of the selected users?')"
+                           value="Submit Selected Users As Students" />
+                </div>
             </form>
         }
         else

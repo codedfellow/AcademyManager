@@ -20,6 +20,7 @@ namespace AcademyManager.ViewModels
         public int Id { get; set; }
         [Required(ErrorMessage ="Add a valid course name")]
         [DataType(DataType.Text)]
+        [Display(Name = "Course Name")]
         public string CourseName { get; set; }
     }
 

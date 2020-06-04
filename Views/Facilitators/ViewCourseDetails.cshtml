@@ -1,16 +1,23 @@
 ﻿@model AcademyManager.ViewModels.CourseVM
-
+@inject UserManager<AMUser> userManager
 @{
     ViewData["Title"] = "ViewCourseDetails";
+    var user = userManager.GetUserAsync(User).Result;
+
 }
-    <div class="container-fluid">
+<div class="container-fluid">
+    <div>
+        <h4>@Model.CourseName Details</h4>
+        <hr />
+        <a class="btn btn-secondary text-white mb-2" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.Id">
+            View tests and exams
+        </a>
+        <a class="btn btn-secondary text-white mb-2" asp-action="TotalPoints" asp-controller="Trainees" asp-route-courseId="@Model.Id">
+            View Total Trainees Points
+        </a>
         <div>
-            <h4>@Model.CourseName Details</h4>
-            <hr />
-            <a class="btn btn-secondary text-white" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.Id">
-                View tests and exams for @Model.CourseName</a>
-        <div>
-            <a class="btn bg-gradient-indigo mt-3" asp-action="ManageCourses">Go back to Manage Courses</a>
+            <a class="btn bg-gradient-indigo mt-3" asp-action="FacilitatorCourses" asp-route-userId="@user.Id">Go back to Courses</a>
         </div>
 
     </div>
+</div>

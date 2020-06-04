@@ -49,6 +49,11 @@ namespace AcademyManager
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /* 
+         This memthod injects usermanager and role manager so that whenever the application is ran, the class that checks if
+         the default user and all application roles already exist is executed and the default user and roles are created if they
+         do not exist when the app is ran for the first time
+             */
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<AMUser> userManager, 
             RoleManager<IdentityRole> roleManager)
         {
@@ -71,13 +76,14 @@ namespace AcademyManager
             app.UseAuthentication();
             app.UseAuthorization();
 
+            // The default user and roles creating class is called here
             DefaultUserssAndRoles.CreateDefaultUsersAndRoles(userManager, roleManager);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Welcome}/{id?}");
+                    pattern: "{controller=Welcome}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

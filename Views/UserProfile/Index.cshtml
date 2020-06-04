@@ -20,8 +20,10 @@
             @if (User.IsInRole("Trainee"))
             {
                 var trainee = userManager.GetUserAsync(User).Result;
-
-                <p class="text-muted text-center">@trainee.TraineeId</p>
+                if (trainee.TraineeId != null)
+                {
+                    <p class="text-muted text-center">@trainee.TraineeId</p>
+                }
             }
             <hr />
             <dl class="row">

@@ -55,12 +55,8 @@ namespace AcademyManager.Controllers
         public IActionResult FacilitatorCourses(string userId)
         {
             var courses = _coursesRepository.GetCourseByFacilitatorId(userId).ToList();
-            if (courses.Count > 0)
-            {
-                var model = _mapper.Map<List<CourseVM>>(courses);
-                return View(model);
-            }
-            return RedirectToAction("Error","Home");
+            var model = _mapper.Map<List<CourseVM>>(courses);
+            return View(model);
         }
 
         public IActionResult AddTestOrExam(int id)
@@ -149,7 +145,12 @@ namespace AcademyManager.Controllers
         public IActionResult ViewCourseTestsAndExams(int courseId)
         {
             var courseTestsAndExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
-            var model = _mapper.Map<List<TestAndExamVM>>(courseTestsAndExams);
+            var testsAndExams = _mapper.Map<List<TestAndExamVM>>(courseTestsAndExams);
+            var model = new ViewCourseTestsAndExamsVM
+            {
+                CourseId = courseId,
+                TestsAndExams = testsAndExams
+            };
             return View(model);
         }
 
@@ -240,5 +241,22 @@ namespace AcademyManager.Controllers
             ModelState.AddModelError("", "FIll all the fields properly");
             return View(model);
         }
+
+        public IActionResult DeleteTestOrExam(int testOrExamId)
+        {
+            var testOrExam = _testsAndExamsRepository.FindById(testOrExamId);
+            var courseId = testOrExam.CourseId;
+            if (testOrExam != null)
+            {
+                var deleteSuccess = _testsAndExamsRepository.Delete(testOrExam);
+                if (deleteSuccess)
+                {
+                    return RedirectToAction("ViewCourseTestsAndExams", new { courseId = courseId });
+                }
+                return View("Error", "Home");
+            }
+            return NotFound();
+        }
+
     }
 }

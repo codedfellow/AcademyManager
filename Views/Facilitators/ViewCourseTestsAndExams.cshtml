@@ -1,47 +1,60 @@
-﻿@model IEnumerable<AcademyManager.ViewModels.TestAndExamVM>
+﻿@model ViewCourseTestsAndExamsVM
 @{ 
     ViewData["Title"] = "ViewCourseTestsAndExams";
 }
 <div class="container-fluid">
     <h1>View Course Tests and Exams</h1>
 
-    <table id="tblList" class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.TestOrExamName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Total)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TestOrExamName)
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Total)
-                    </td>
-                    <td>
-                        <a class="btn bg-gradient-indigo" asp-action="ListTraineesForTest" asp-route-testOrExamId="@item.Id">
-                            <i class="fas fa-edit"></i>Edit Scores
-                        </a>
-                        <a class="btn btn-info" asp-action="EditTestsOrExam" asp-route-testOrExamId="@item.Id">
-                        <i class="fas fa-pen-alt"></i>
-                            Edit Test or Exam
-                        </a>
-                        <a class="btn btn-secondary" asp-action="ViewTraineesScores" asp-route-testOrExamId="@item.Id">
-                            <i class="fas fa-info-circle"></i>
-                            View Trainees Scores
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card">
+        <div class="card-body">
+            <table id="tblList" class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Test/Exam Name
+                        </th>
+                        <th>
+                            Total
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.TestsAndExams)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TestOrExamName)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Total)
+                            </td>
+                            <td>
+                                <a class="btn bg-gradient-indigo" asp-action="ListTraineesForTest" asp-route-testOrExamId="@item.Id">
+                                    <i class="fas fa-edit"></i>Edit Scores
+                                </a>
+                                <a class="btn btn-info" asp-action="EditTestsOrExam" asp-route-testOrExamId="@item.Id">
+                                    <i class="fas fa-pen-alt"></i>
+                                    Edit Test or Exam
+                                </a>
+                                <a class="btn btn-secondary" asp-action="ViewTraineesScores" asp-route-testOrExamId="@item.Id">
+                                    <i class="fas fa-info-circle"></i>
+                                    View Trainees Scores
+                                </a>
+                                <a class="btn btn-danger text-white"
+                                   onclick="return confirm('Are you sure you want to delete @item.TestOrExamName')"
+                                   asp-action="DeleteTestOrExam" asp-route-testOrExamId="@item.Id">
+                                    <i class="fas fa-trash"></i>
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-info" asp-action="ViewCourseDetails" asp-route-courseId="@Model.CourseId">Back</a>
+        </div>
+    </div>
 
 </div>

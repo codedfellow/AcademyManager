@@ -4,35 +4,38 @@
     ViewData["Title"] = "EditTestsOrExam";
 }
 
-<h1>Edit Test Or Exam</h1>
-
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditTestsOrExam">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="TestOrExamName" class="control-label"></label>
-                <input asp-for="TestOrExamName" class="form-control" />
-                <span asp-validation-for="TestOrExamName" class="text-danger"></span>
+    <div class="container-fluid">
+        <div class="col-md-6" style="margin: 5px auto;">
+            <div class="card card-purple">
+                <div class="card-header">
+                    <h1 class="card-title">Edit Test Or Exam</h1>
+                </div>
+                <div class="card-body">
+                    <form asp-action="EditTestsOrExam">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-group">
+                            <label asp-for="TestOrExamName" class="control-label"></label>
+                            <input asp-for="TestOrExamName" class="form-control" />
+                            <span asp-validation-for="TestOrExamName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="CourseId" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Total" class="control-label"></label>
+                            <input asp-for="Total" class="form-control" />
+                            <span asp-validation-for="Total" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Update" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <a class="btn bg-gradient-indigo" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.CourseId">Back to List</a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="CourseId" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Update" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>       
     </div>
-</div>
-
-<div>
-    <a class="btn bg-gradient-indigo" asp-action="ViewCourseTestsAndExams" asp-route-courseId="@Model.CourseId">Back to List</a>
-</div>
 

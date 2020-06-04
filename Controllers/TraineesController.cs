@@ -90,14 +90,83 @@ namespace AcademyManager.Controllers
                 for (int i = 0; i < courseTestsOrExams.Count; i++)
                 {
                     var score = _scoresRepository.GetScoreByTestAndExamIdAndTraineeId(courseTestsOrExams[i].Id, trainee.Id);
-                    var scoreModel = _mapper.Map<ScoresVM>(score);
-                    scores.Add(scoreModel);
+                    if (score != null)
+                    {
+                        var scoreModel = _mapper.Map<ScoresVM>(score);
+                        scores.Add(scoreModel);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
             var model = new PersonalCourseDetailsVM
             {
                 CourseId = courseId,
                 Scores = scores
+            };
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [Authorize(Roles = "Trainee, Facilitator")]
+        public IActionResult TotalPoints(int courseId)
+        {
+            var testsAndExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(courseId).ToList();
+            var allScores = new List<List<Scores>>();
+            int courseTotal = 0;
+            foreach (var item in testsAndExams)
+            {
+                var scores = _scoresRepository.GetScoreByTestOrExamId(item.Id).ToList();
+                courseTotal += item.Total;
+                allScores.Add(scores);
+            }
+            
+            var trainees = new List<string>();
+            foreach (var item in allScores)
+            {
+                foreach (var scoreSet in item)
+                {
+                    if (!trainees.Contains(scoreSet.TraineeId))
+                    {
+                        trainees.Add(scoreSet.TraineeId);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            var traineePoints = new List<TotalPoints>();
+            foreach (var item in trainees)
+            {
+                double total = 0;
+                foreach (var scoreSet in testsAndExams)
+                {
+                    var score = _scoresRepository.GetScoreByTestAndExamIdAndTraineeId(scoreSet.Id, item);
+                    if (score == null)
+                    {
+                        total += 0;
+                    }
+                    else
+                    {
+                        total += score.Score;
+                    }
+                }
+                var average = (total / courseTotal) * 100;
+                var totalTraineePoint = new TotalPoints
+                {
+                    TraineeId = item,
+                    TotalPoint = Math.Round(average, 4)
+                };
+                traineePoints.Add(totalTraineePoint);
+            }
+            var model = new TotalPointsViewModel
+            {
+                CourseId = courseId,
+                Points = traineePoints
             };
             return View(model);
         }

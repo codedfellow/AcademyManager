@@ -3,51 +3,58 @@
 @{
     ViewData["Title"] = "Index";
 }
+    <div class="container-fluid">
         <h1>Administrators List</h1>
-
-        <table id="tblList" class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.MiddleName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    var currentAdmin = user.GetUserAsync(User).Result;
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MiddleName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PhoneNumber)
-                        </td>
-                        <td>
-                            @if (currentAdmin.Id != item.Id)
-                            {
-                                <a class="btn btn-danger" asp-action="RemoveFromAdminRole" asp-route-id="@item.Id">Remove from Administrator Role</a>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <a class="btn bg-gradient-indigo" asp-controller="AdminPortal" asp-action="Index">Back to Admin Portal</a>
+        <div class="card">
+            <div class="card-body">
+                <table id="tblList" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.MiddleName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LastName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.PhoneNumber)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var currentAdmin = user.GetUserAsync(User).Result;
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MiddleName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                                </td>
+                                <td>
+                                    @if (currentAdmin.Id != item.Id)
+                                    {
+                                        <a class="btn btn-danger" asp-action="RemoveFromAdminRole" asp-route-id="@item.Id">Remove from Administrator Role</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <a class="btn bg-gradient-indigo" asp-controller="AdminPortal" asp-action="Index">Back to Admin Portal</a>
+            </div>
+        </div>
+    </div>

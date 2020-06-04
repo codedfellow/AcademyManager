@@ -1,33 +1,47 @@
 ﻿@model PersonalCourseDetailsVM
 @inject AcademyManager.Contracts.IScoresRepository scoresRepo
 @inject AcademyManager.Contracts.ITestsAndExamsRepository testsAndExamsRepo
+@inject AcademyManager.Contracts.ICoursesRepository coursesRepo
 @{
     ViewData["Title"] = "PersonalCourseDetails";
+    var course = coursesRepo.FindById(Model.CourseId);
 }
 
-<h1>Personal Course Details</h1>
+    <div class="container-fluid">
+        <h1>@course.CourseName Personal Details</h1>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            @foreach (var item in Model.Scores)
-            {
-                var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
-                <th>
-                    @testOrExam.TestOrExamName
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            @foreach (var item in Model.Scores)
-            {
-                <td>
-                    @item.Score
-                </td>
-            }
-        </tr>
-    </tbody>
-</table>
+        @if (Model.Scores.Count > 0)
+        {
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                @foreach (var item in Model.Scores)
+                                {
+                                    var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
+                                    <th>
+                                        @testOrExam.TestOrExamName
+                                    </th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                @foreach (var item in Model.Scores)
+                                {
+                                    <td>
+                                        @item.Score
+                                    </td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <h3 class="text-warning">No scores in any tests or exams for you yet in @course.CourseName</h3>
+        }
+    </div>

@@ -6,14 +6,18 @@ using AcademyManager.Contracts;
 using AcademyManager.Models;
 using AcademyManager.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AcademyManager.Controllers
 {
+    // This controller is used by adminitrators to manage the app
+    [Authorize(Roles = "Administrator")]
     public class AdministratorsController : Controller
     {
+        // Dependency injection and initialization in the constructor
         private readonly UserManager<AMUser> _userManager;
         private readonly SignInManager<AMUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -32,6 +36,7 @@ namespace AcademyManager.Controllers
             _coursesRepository = coursesRepository;
         }
 
+        // This index view displays the list of administrators
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.GetUsersInRoleAsync("Administrator");
@@ -39,10 +44,12 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // This get method returns the view that is used to create app administrators
         [HttpGet]
         public async Task<IActionResult> CreateAdministrators(int id)
         {
             var appUsers = _userManager.Users.AsEnumerable().ToList();
+
             List<AMUser> toBeSelected = new List<AMUser>();
             for (int i = 0; i < appUsers.Count; i++)
             {
@@ -59,6 +66,8 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+
+        // This method handles the post method for creating facilitators
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdministrators(List<FacilitatorsVM> model)
@@ -93,6 +102,7 @@ namespace AcademyManager.Controllers
             }
         }
 
+        // This method is the get view that is used to create facilitators
         [HttpGet]
         public async Task<IActionResult> CreateFacilitators(int id)
         {
@@ -113,6 +123,8 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+
+        // This method handles the post method of the create facilitators view
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFacilitators(List<FacilitatorsVM> model)
@@ -147,6 +159,7 @@ namespace AcademyManager.Controllers
             }
         }
 
+        // This method is the get method that is used to create trainees
         [HttpGet]
         public async Task<IActionResult> CreateTrainees()
         {
@@ -168,7 +181,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
-        // POST: Students/Create
+        // This method handles the post action of the create trainees form
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateTrainees(List<TraineesVM> model)
@@ -202,6 +215,8 @@ namespace AcademyManager.Controllers
                 return View(model);
             }
         }
+
+        // This method is used to assign serial number to a trainee
         public async Task<IActionResult> AssignTraineeSerial()
         {
             var trainees = await _userManager.GetUsersInRoleAsync("Trainee");
@@ -210,6 +225,8 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+
+        // THis method is used to generate the serial number of a trainee
         public async Task<IActionResult> GenerateSerial(string Id)
         {
             var user = await _userManager.FindByIdAsync(Id);
@@ -228,6 +245,7 @@ namespace AcademyManager.Controllers
             return View("Error");
         }
 
+        // THis method returns the view of the list of trainees
         public IActionResult TraineesList()
         {
             var users = _userManager.GetUsersInRoleAsync("Trainee").Result;
@@ -235,6 +253,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // This method reutrns the view of the list of facilitators
         public IActionResult FacilitatorsList()
         {
             var users = _userManager.GetUsersInRoleAsync("Facilitator").Result;
@@ -242,11 +261,13 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // This method returns the get view for creating a course
         public IActionResult CreateCourse()
         {
             return View();
         }
 
+        // This method is for the post action that creates a course
         [HttpPost]
         public IActionResult CreateCourse(CreateCourseVM model)
         {
@@ -267,6 +288,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // This method returns the get view for creating courses
         public async Task<IActionResult> EditCourse(int id)
         {
             var course = _coursesRepository.FindById(id);
@@ -286,6 +308,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // This method edits an alaready exisiting course
         [HttpPost]
         public async Task<IActionResult> EditCourse(EditCourseVM model)
         {
@@ -311,7 +334,16 @@ namespace AcademyManager.Controllers
                     ModelState.AddModelError("", "Please fill all the required fields correctly");
                     return View(model);
                 }
-                course.FacilitatorId = model.FacilitatorId;
+                if (model.FacilitatorId != "Select Facilitator")
+                {
+                    course.FacilitatorId = model.FacilitatorId;
+                }
+                else
+                {
+                    course.FacilitatorId = null;
+                }
+                
+                course.CourseName = model.CourseName;
                 var isSuccess = _coursesRepository.Update(course);
                 if (!isSuccess)
                 {
@@ -327,6 +359,7 @@ namespace AcademyManager.Controllers
             }
         }
 
+        // This method removes a user from the trainee role
         public IActionResult RemoveFromTraineeRole(string id)
         {
             var trainee = _userManager.FindByIdAsync(id).Result;
@@ -343,6 +376,7 @@ namespace AcademyManager.Controllers
             return View("Error", "Home");
         }
 
+        // This method removes a user from the facilitator role
         public IActionResult RemoveFromFacilitatorRole(string id)
         {
             var facilitator = _userManager.FindByIdAsync(id).Result;
@@ -360,6 +394,7 @@ namespace AcademyManager.Controllers
             return View("Error", "Home");
         }
 
+        // This method removes a user from the admin role
         public IActionResult RemoveFromAdminRole(string id)
         {
             var admin = _userManager.FindByIdAsync(id).Result;
@@ -371,6 +406,7 @@ namespace AcademyManager.Controllers
             return View("Error", "Home");
         }
 
+        // This method returns a view containing the list of courses
         public IActionResult CourseList()
         {
             var courses = _coursesRepository.FindAll().ToList();
@@ -378,6 +414,7 @@ namespace AcademyManager.Controllers
             return View(model);
         }
 
+        // THis method is used to delete a course
         public IActionResult DeleteCourse(int id)
         {
             var course = _coursesRepository.FindById(id);
@@ -393,6 +430,7 @@ namespace AcademyManager.Controllers
             return View("Error", "Home");
         }
 
+        // Thus method returns a view containing the list of all the app users
         public IActionResult AllUsersList()
         {
             var allUsers = _userManager.Users.ToList();

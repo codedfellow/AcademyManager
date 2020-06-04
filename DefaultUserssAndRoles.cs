@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AcademyManager
 {
+    //This class creates the default users and roles for the app
     public static class DefaultUserssAndRoles
     {
         public static void CreateDefaultUsersAndRoles(UserManager<AMUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -15,6 +16,10 @@ namespace AcademyManager
             DefaultUsers(userManager);
         }
 
+        /* 
+         this function checks if the default app user admin@localhost.com already exists and creates it if it is not existing already
+         add also adds the default user to to Administrator role
+             */
         private static void DefaultUsers(UserManager<AMUser> userManager)
         {
             if (userManager.FindByNameAsync("admin@localhost.com").Result == null)
@@ -32,6 +37,9 @@ namespace AcademyManager
             }
         }
 
+        /* 
+         This function checks if the three default roles of the application exists already or creates them if they do not exist
+             */
         private static void DefaultRoles(RoleManager<IdentityRole> roleManager)
         {
             if (!roleManager.RoleExistsAsync("Administrator").Result)

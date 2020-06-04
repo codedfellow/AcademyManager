@@ -1,46 +1,62 @@
 ﻿@model GeneralCourseDetailsVM
 @inject AcademyManager.Contracts.IScoresRepository scoresRepo
 @inject AcademyManager.Contracts.ITestsAndExamsRepository testsAndExamsRepo
+@inject AcademyManager.Contracts.ICoursesRepository coursesRepo
 @inject UserManager<AMUser> user
 @{
     ViewData["Title"] = "GeneralCourseDetails";
+    var course = coursesRepo.FindById(Model.CourseId);
 }
 
-<h1>General Course Details</h1>
-<div class="row">
-    @foreach (var item in Model.TestsOrExams)
-    {
-        <div class="card col-sm-6 mb-2 col-12">
-            @{
-                var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
-            }
-                <div class="card-header">
-                    <h4 class="card-title">@testOrExam.TestOrExamName</h4>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Trainee</th>
-                                <th>Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @{
-                                var scores = item.Scores;
-                                for (int i = 0; i < scores.Count; i++)
-                                {
-                                    var trainee = user.FindByIdAsync(scores[i].TraineeId).Result;
+    <div class="container-fluid">
 
+        <h1>@course.CourseName Details</h1>
+
+        @if (Model.TestsOrExams.Count > 0)
+        {
+            <div class="row">
+                @foreach (var item in Model.TestsOrExams)
+                {
+                    <div class="card col-sm-6 mb-2 col-12">
+                        @{
+                            var testOrExam = testsAndExamsRepo.FindById(item.TestOrExamId);
+                        }
+                        <div class="card-header">
+                            <h4 class="card-title"><b>@testOrExam.TestOrExamName</b></h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table tblList">
+                                <thead>
                                     <tr>
-                                        <td><b>@trainee.FirstName @trainee.LastName @trainee.MiddleName</b></td>
-                                        <td>@scores[i].Score</td>
+                                        <th>Trainee</th>
+                                        <th>Score (@testOrExam.Total)</th>
                                     </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var scores = item.Scores;
+                                        for (int i = 0; i < scores.Count; i++)
+                                        {
+                                            var trainee = user.FindByIdAsync(scores[i].TraineeId).Result;
+
+                                            <tr>
+                                                <td><b>@trainee.FirstName @trainee.LastName @trainee.MiddleName</b></td>
+                                                <td>@scores[i].Score</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
             </div>
-            }
-        </div>
+            <a class="btn btn-info" asp-action="TotalPoints" asp-route-courseId="@Model.CourseId">
+                Total Points
+            </a>
+        }
+        else
+        {
+            <h3 class="text-warning">No Tests or Exams for this course yet</h3>
+        }
+    </div>

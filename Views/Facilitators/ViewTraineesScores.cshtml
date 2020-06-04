@@ -5,44 +5,51 @@
     ViewData["Title"] = "ViewTraineesScores";
 }
 
-<h1>View Trainees Scores</h1>
+    <div class="container-fluid">
+        <h1>View Trainees Scores</h1>
 
-<table id="tblList" class="table">
-    <thead>
-        <tr>
-            <th>
-                Trainee Id
-            </th>
-            <th>
-                Trainee
-            </th>
-            <th>
-                Test Or Exam
-            </th>
-            <th>
-                Score
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-    var testOrExaminfo = testOrExam.FindById(item.TestOrExamId);
-    var trainee = user.FindByIdAsync(item.TraineeId).Result;
-        <tr>
-            <td>
-                @trainee.TraineeId
-            </td>
-            <td>
-                @trainee.FirstName @trainee.LastName @trainee.MiddleName
-                @Html.DisplayFor(modelItem => item.Trainee.Id)
-            </td>
-            <td>
-                @testOrExaminfo.TestOrExamName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Score)
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <div class="card">
+            <div class="card-body">
+                <table id="tblList" class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Trainee Id
+                            </th>
+                            <th>
+                                Trainee
+                            </th>
+                            <th>
+                                Test Or Exam
+                            </th>
+                            <th>
+                                Score
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var testOrExaminfo = testOrExam.FindById(item.TestOrExamId);
+                            var trainee = user.FindByIdAsync(item.TraineeId).Result;
+                            <tr>
+                                <td>
+                                    @trainee.TraineeId
+                                </td>
+                                <td>
+                                    @trainee.FirstName @trainee.LastName @trainee.MiddleName
+                                    @Html.DisplayFor(modelItem => item.Trainee.Id)
+                                </td>
+                                <td>
+                                    @testOrExaminfo.TestOrExamName
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Score)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
