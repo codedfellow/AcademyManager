@@ -51,6 +51,11 @@ namespace AcademyManager.Repository
             return scoresForTestOrExam;
         }
 
+        public ICollection<Scores> GetScoresByTraineeId(string traineeId)
+        {
+            return FindAll().Where(x => x.TraineeId == traineeId).ToList();
+        }
+
         public bool IsExist(int id)
         {
             var exists = _db.Scores.Any(q => q.Id == id);

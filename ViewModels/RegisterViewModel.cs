@@ -12,7 +12,7 @@ namespace AcademyManager.ViewModels
         public string UserName { get; set; }
         [Required]
         [Display(Name = "Email")]
-        [Remote(action: "IsEmailInUse", controller:"UserAccounts")]
+        [Remote(action: "IsEmailInUse", controller:"Account")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address")]
         public string Email { get; set; }
 

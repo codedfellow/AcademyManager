@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AcademyManager.Contracts
 {
-    public interface ISerialStoreRepository : IBaseRepository<TraineeSerialStore>
+    public interface ISerialStoreRepository : IBaseRepository<AppStateStore>
     {
     }
 }

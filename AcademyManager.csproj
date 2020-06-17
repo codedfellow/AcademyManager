@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200425182356_AddedMoreTables.cs" />
     <Compile Remove="Migrations\20200425182356_AddedMoreTables.Designer.cs" />
+    <Compile Remove="Migrations\20200604002735_AddedResultReadyColumn.cs" />
+    <Compile Remove="Migrations\20200604002735_AddedResultReadyColumn.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

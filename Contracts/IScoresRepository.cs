@@ -10,5 +10,6 @@ namespace AcademyManager.Contracts
     {
         Scores GetScoreByTestAndExamIdAndTraineeId(int testOrExamId, string traineeId);
         ICollection<Scores> GetScoreByTestOrExamId(int testOrExamId);
+        ICollection<Scores> GetScoresByTraineeId(string traineeId);
     }
 }

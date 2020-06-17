@@ -24,8 +24,6 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-
-
                             <tr>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.CourseName)
@@ -50,6 +48,9 @@
                         }
                     </tbody>
                 </table>
+            </div>
+            <div class="card-footer">
+                <a asp-controller="Trainees" asp-action="Result" class="btn btn-primary">View Result</a>
             </div>
         </div>
     </div>

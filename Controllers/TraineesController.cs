@@ -170,5 +170,54 @@ namespace AcademyManager.Controllers
             };
             return View(model);
         }
+
+        public IActionResult Result()
+        {
+            var trainee = _userManager.GetUserAsync(User).Result;
+            var traineeScores = _scoresRepository.GetScoresByTraineeId(trainee.Id).ToList();
+            var traineeCourses = new List<int>();
+
+            foreach (var item in traineeScores)
+            {
+                var testOrExam = _testsAndExamsRepository.FindById(item.TestOrExamId);
+                var course = _coursesRepository.FindById(testOrExam.CourseId);
+                if (traineeCourses.Contains(course.Id))
+                {
+                    continue;
+                }
+                else
+                {
+                    traineeCourses.Add(course.Id);
+                }
+            }
+
+            var traineeResult = new List<TotalCourseScoreVM>();
+
+            foreach (var item in traineeCourses)
+            {
+                double totalScore = 0;
+                var totalMark = 0;
+                var testOrExams = _testsAndExamsRepository.GetTestsAndExamsByCourseId(item).ToList();
+                for (int i = 0; i < testOrExams.Count; i++)
+                {
+                    totalMark += testOrExams[i].Total;
+                    var score = _scoresRepository.GetScoreByTestAndExamIdAndTraineeId(testOrExams[i].Id, trainee.Id);
+                    if (score != null)
+                    {
+                        totalScore += score.Score;
+                    }
+                }
+
+                var averageScore = (totalScore / totalMark) * 100;
+                var courseScore = new TotalCourseScoreVM
+                {
+                    CoureId = item,
+                    TotalScore = Math.Round(averageScore, 4)
+                };
+                traineeResult.Add(courseScore);
+            }
+            var model = traineeResult;
+            return View(model);
+        }
     }
 }

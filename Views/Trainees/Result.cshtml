@@ -1,0 +1,69 @@
+﻿@model List<TotalCourseScoreVM>
+@inject UserManager<AMUser> userManager
+@inject AcademyManager.Contracts.ICoursesRepository courseRepo
+@{
+    ViewData["Title"] = "Result";
+    var trainee = userManager.GetUserAsync(User).Result;
+    var pictureUrl = "~/images/" + (trainee.PictureUrl ?? "noimage.png");
+    var coursesTotal = 0;
+    double traineesTotal = 0;
+}
+
+@if (Model.Count > 0)
+{
+    <div class="card">
+        <div class="card-header text-center">
+            <div class="bg-dark">
+                <h2 class="text-white">Fintrak Academy Result</h2>
+            </div>
+            <h4>@trainee.FirstName @trainee.MiddleName @trainee.LastName</h4>
+
+            <img class="card-img-top" src="@pictureUrl" asp-append-version="true" style="height: 120px; width: auto;" />
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            Course
+                        </th>
+                        <th>
+                            Points
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        coursesTotal += 100;
+                        traineesTotal += item.TotalScore;
+                        var course = courseRepo.FindById(item.CoureId);
+                        <tr>
+                            <td>
+                                @course.CourseName
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TotalScore)
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            <b>Total Points</b>
+                        </td>
+                        <td>
+                            <i><b>@traineesTotal</b> out of <b>@coursesTotal</b></i>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+}
+else
+{
+    <div>
+        <h3 class="text-warning">No result for you yet</h3>
+    </div>
+}

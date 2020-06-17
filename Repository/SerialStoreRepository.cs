@@ -15,33 +15,33 @@ namespace AcademyManager.Repository
         {
             _db = db;
         }
-        public bool Create(TraineeSerialStore entity)
+        public bool Create(AppStateStore entity)
         {
-            _db.TraineeSerialStores.Add(entity);
+            _db.AppStateStore.Add(entity);
             return Save();
         }
 
-        public bool Delete(TraineeSerialStore entity)
+        public bool Delete(AppStateStore entity)
         {
-            _db.TraineeSerialStores.Remove(entity);
+            _db.AppStateStore.Remove(entity);
             return Save();
         }
 
-        public ICollection<TraineeSerialStore> FindAll()
+        public ICollection<AppStateStore> FindAll()
         {
-            var serials = _db.TraineeSerialStores.ToList();
+            var serials = _db.AppStateStore.ToList();
             return serials;
         }
 
-        public TraineeSerialStore FindById(int id)
+        public AppStateStore FindById(int id)
         {
-            var serial = _db.TraineeSerialStores.Find(id);
+            var serial = _db.AppStateStore.Find(id);
             return serial;
         }
 
         public bool IsExist(int id)
         {
-            var exists = _db.TraineeSerialStores.Any(q => q.Id == id);
+            var exists = _db.AppStateStore.Any(q => q.Id == id);
             return exists;
         }
 
@@ -51,9 +51,9 @@ namespace AcademyManager.Repository
             return changes > 0;
         }
 
-        public bool Update(TraineeSerialStore entity)
+        public bool Update(AppStateStore entity)
         {
-            _db.TraineeSerialStores.Update(entity);
+            _db.AppStateStore.Update(entity);
             return Save();
         }
     }

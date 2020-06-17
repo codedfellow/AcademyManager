@@ -437,5 +437,10 @@ namespace AcademyManager.Controllers
             var model = _mapper.Map<List<UserVM>>(allUsers);
             return View(model);
         }
+
+        //public IActionResult ResultReady()
+        //{
+        //    return View();
+        //}
     }
 }
