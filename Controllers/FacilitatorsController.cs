@@ -257,6 +257,5 @@ namespace AcademyManager.Controllers
             }
             return NotFound();
         }
-
     }
 }

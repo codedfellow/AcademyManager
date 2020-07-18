@@ -25,14 +25,14 @@ namespace AcademyManager.Controllers
             this.signInManager = signInManager;
             this.mapper = mapper;
         }
-        //This action handles get method of the register view
+        //This action renders the register view
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
 
-        //This action manages the post method of the user registration form
+        //This action handles the registration of a new user from the register view's form
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -50,8 +50,7 @@ namespace AcademyManager.Controllers
                  */
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("Login");
                 }
 
                 // Check for errors in the user form entry and display them to the user
@@ -62,14 +61,14 @@ namespace AcademyManager.Controllers
             }
             return View(model);
         }
-        //THis action handles the get method of the login view
+        //THis action renders the login page
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        // This method handles the post submission of the login form
+        // This method handles the login of an already registered user
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {

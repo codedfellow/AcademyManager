@@ -39,6 +39,7 @@ namespace AcademyManager.Controllers
         // This index view displays the list of administrators
         public async Task<IActionResult> Index()
         {
+            // Get the list of all users in the Administrator role
             var users = await _userManager.GetUsersInRoleAsync("Administrator");
             var model = _mapper.Map<IList<AMUser>, IList<FacilitatorsVM>>(users);
             return View(model);
@@ -48,14 +49,21 @@ namespace AcademyManager.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateAdministrators(int id)
         {
+            // Get the list of all registered app users
             var appUsers = _userManager.Users.AsEnumerable().ToList();
 
+            // Stores the list of users that can be selected as administrators
             List<AMUser> toBeSelected = new List<AMUser>();
             for (int i = 0; i < appUsers.Count; i++)
             {
+
                 if (!(await _userManager.IsInRoleAsync(appUsers[i], "Trainee"))
                     && !(await _userManager.IsInRoleAsync(appUsers[i], "Administrator")))
                 {
+                    /*
+                     If the current user in the loop is not in the trainee and administrator role add the user to the toBeSelected variable.
+                     Meaning facilitators can be administrators
+                     */
                     toBeSelected.Add(appUsers[i]);
                     continue;
                 }
@@ -67,7 +75,7 @@ namespace AcademyManager.Controllers
         }
 
 
-        // This method handles the post method for creating facilitators
+        // This method creates new administrators
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAdministrators(List<FacilitatorsVM> model)
@@ -79,6 +87,8 @@ namespace AcademyManager.Controllers
                     if (model[i].IsSelected)
                     {
                         var user = await _userManager.FindByIdAsync(model[i].Id);
+
+                        // Add the current user in the loop to the administrator role
                         var result = await _userManager.AddToRoleAsync(user, "Administrator");
                         if (result.Succeeded)
                         {
@@ -102,17 +112,24 @@ namespace AcademyManager.Controllers
             }
         }
 
-        // This method is the get view that is used to create facilitators
+        // This method renders the view for creating facilitators
         [HttpGet]
         public async Task<IActionResult> CreateFacilitators(int id)
         {
+            // Get the list of all users in the app
             var appUsers = _userManager.Users.AsEnumerable().Where(p => p.UserName != "admin@localhost.com").ToList();
+
+            // Variable stores the list of users that can be selected as facilitators
             List<AMUser> toBeSelected = new List<AMUser>();
             for (int i = 0; i < appUsers.Count; i++)
             {
                 if (!(await _userManager.IsInRoleAsync(appUsers[i], "Trainee"))
                     && !(await _userManager.IsInRoleAsync(appUsers[i], "Facilitator")))
                 {
+                    /*
+                     If the current user in the loop is not in the trainee role and is not in the facilitator role, add the user to the list
+                     of users that can be facilitators
+                     */
                     toBeSelected.Add(appUsers[i]);
                     continue;
                 }

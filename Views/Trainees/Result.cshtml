@@ -13,7 +13,7 @@
 {
     <div class="card">
         <div class="card-header text-center">
-            <div class="bg-dark">
+            <div class="bg-gradient-indigo p-2">
                 <h2 class="text-white">Fintrak Academy Result</h2>
             </div>
             <h4>@trainee.FirstName @trainee.MiddleName @trainee.LastName</h4>
@@ -52,18 +52,31 @@
                             <b>Total Points</b>
                         </td>
                         <td>
-                            <i><b>@traineesTotal</b> out of <b>@coursesTotal</b></i>
+                            @{
+                                traineesTotal = Math.Round(traineesTotal, 2);
+                                <i><b>@traineesTotal</b> out of <b>@coursesTotal</b></i>
+                            }
                         </td>
                     </tr>
                 </tbody>
             </table>
+            <div class="card-footer text-center">
+                <button class="btn btn-secondary" onclick="printResult()">Print Result</button>
+            </div>
         </div>
     </div>
-    
+
 }
 else
 {
     <div>
         <h3 class="text-warning">No result for you yet</h3>
     </div>
+}
+@section Scripts{
+    <script>
+        function printResult() {
+            window.print();
+        }
+    </script>
 }

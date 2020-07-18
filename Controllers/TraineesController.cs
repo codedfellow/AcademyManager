@@ -159,7 +159,7 @@ namespace AcademyManager.Controllers
                 var totalTraineePoint = new TotalPoints
                 {
                     TraineeId = item,
-                    TotalPoint = Math.Round(average, 4)
+                    TotalPoint = Math.Round(average, 2)
                 };
                 traineePoints.Add(totalTraineePoint);
             }
@@ -212,7 +212,7 @@ namespace AcademyManager.Controllers
                 var courseScore = new TotalCourseScoreVM
                 {
                     CoureId = item,
-                    TotalScore = Math.Round(averageScore, 4)
+                    TotalScore = Math.Round(averageScore, 2)
                 };
                 traineeResult.Add(courseScore);
             }

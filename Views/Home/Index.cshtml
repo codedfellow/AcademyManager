@@ -5,52 +5,32 @@
 }
     <section class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+                <div class="text-center">
                     <h1>Academy Manager</h1>
                 </div>
-            </div>
         </div><!-- /.container-fluid -->
     </section>
 
     <div class="card card-solid">
         <div class="card-body">
-            <div class="row">
-                <div class="col-12 col-sm-2">
-                    <h3 class="d-inline-block d-sm-none">Welcome to Academy Manager App</h3>
-                    <div class="col-12">
-                        <img class="product-image" src="~/images/AcademyManagerLogo.png" height="90" width="90" />
-                    </div>
+            <div class="text-center">
+                <div class="col-12">
+                    <img class="product-image" src="~/images/AcademyManagerLogo.png" style="height:120px;width:auto;" />
                 </div>
-                <div class="col-12 col-sm-10">
-                    <h3 class="my-3">About this App</h3>
+                <div class="bg-orange py-2 px-3 mt-4">
+                    <h2 class="mb-0">
+                        Welcome @userManager.GetUserName(User)
+                    </h2>
+                </div>
+            </div>
+            <div class="row py-2 px-3 mt-4">
                     <p>
                         This app can be used to manage the Training Academy of new employees for any company.
                         The facilitators and the students alike can see the information that is relevant to them.
+                        The trainee is allowed to view his/her performance at any point in time in order for them to discover areas where they
+                        need to improve. The app is transparent and helps to bring out the best in the trainee as he/she will be able to
+                        discover weaknesses on time.
                     </p>
-
-                    <hr>
-
-                    <div class="bg-gray py-2 px-3 mt-4">
-                        <h2 class="mb-0">
-                            Welcome @userManager.GetUserName(User)
-                        </h2>
-                    </div>
-
-                    @*<div class="mt-4">
-                        <a class="btn btn-primary btn-lg btn-flat">
-                            <i class="fas fa-cart-plus fa-lg mr-2"></i>
-                            Add to Cart
-                        </a>
-
-                        <div class="btn btn-default btn-lg btn-flat">
-                            <i class="fas fa-heart fa-lg mr-2"></i>
-                            Add to Wishlist
-                        </div>
-                    </div>*@
-
-
-                </div>
             </div>
         </div>
         <!-- /.card-body -->
