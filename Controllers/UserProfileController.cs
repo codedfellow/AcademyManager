@@ -97,12 +97,19 @@ namespace AcademyManager.Controllers
                     }
                     else
                     {
-                        if (model.PictureUrl != null)
+                        if (model.DeleteOldPicture)
                         {
-                            string filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", model.PictureUrl);
-                            System.IO.File.Delete(filePath);
+                            if (model.PictureUrl != null)
+                            {
+                                string filePath = Path.Combine(_hostEnvironment.WebRootPath, "images", model.PictureUrl);
+                                System.IO.File.Delete(filePath);
+                                editedUser.PictureUrl = null;
+                            }
+                            else
+                            {
+                                editedUser.PictureUrl = null;
+                            }
                         }
-                        editedUser.PictureUrl = null;
                     }
                     var result = await userManager.UpdateAsync(editedUser);
                     if (result.Succeeded)

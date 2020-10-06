@@ -35,7 +35,7 @@ namespace AcademyManager.ViewModels
         [Display(Name = "New Password")]
         public string NewPassword { get; set; }
         [Required]
-        [DataType(DataType.Password, ErrorMessage = "Wrong password format")]
+        [Compare("NewPassword", ErrorMessage = "The password fields must match")]
         [Display(Name = "Confirm New Password")]
         public string ConfiremNewPassword { get; set; }
     }
@@ -53,6 +53,8 @@ namespace AcademyManager.ViewModels
         [Display(Name = "Phone:")]
         [Phone]
         public string PhoneNumber { get; set; }
+        [Display(Name ="Delete Old Picture")]
+        public bool DeleteOldPicture { get; set; }
         public string PictureUrl { get; set; }
         public IFormFile Picture { get; set; }
     }

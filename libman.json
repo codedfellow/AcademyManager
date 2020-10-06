@@ -5,6 +5,10 @@
     {
       "library": "datatables@1.10.20",
       "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "jspdf@2.0.0",
+      "destination": "wwwroot/lib/jspdf/"
     }
   ]
 }

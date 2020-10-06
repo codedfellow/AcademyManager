@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AcademyManager.Contracts;
 using AcademyManager.Models;
@@ -96,7 +97,10 @@ namespace AcademyManager.Controllers
                         }
                         else if (!(result.Succeeded))
                         {
-                            ModelState.AddModelError("", "An error occured while creating the administrators");
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
                             return View(model);
                         }
                     }
@@ -351,7 +355,7 @@ namespace AcademyManager.Controllers
                     ModelState.AddModelError("", "Please fill all the required fields correctly");
                     return View(model);
                 }
-                if (model.FacilitatorId != "Select Facilitator")
+                if (model.FacilitatorId != null)
                 {
                     course.FacilitatorId = model.FacilitatorId;
                 }
@@ -412,6 +416,7 @@ namespace AcademyManager.Controllers
         }
 
         // This method removes a user from the admin role
+        [Authorize(Policy = "RootAdminPolicy")]
         public IActionResult RemoveFromAdminRole(string id)
         {
             var admin = _userManager.FindByIdAsync(id).Result;

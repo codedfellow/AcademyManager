@@ -45,7 +45,16 @@ namespace AcademyManager
             //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             //    .AddEntityFrameworkStores<AppDbContext>();
             services.AddControllersWithViews();
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("RootAdminPolicy", policy => policy.RequireUserName("admin@localhost.com"));
+            });
             services.AddRazorPages();
+
+            //services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.AutomaticAuthentication = false;
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

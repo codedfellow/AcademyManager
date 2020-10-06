@@ -6,34 +6,41 @@
     var trainee = userManager.FindByIdAsync(Model.TraineeId).Result;
 }
 <div class="container-fluid">
-    <h1>Add Score for @trainee.FirstName @trainee.LastName @trainee.MiddleName</h1>
-    <h4>Total: @testOrExam.Total</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="AddScore">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <input asp-for="TraineeId" type="hidden" />
+    <div class="col-md-6" style="margin: 5px auto;">
+        <div class="card card-primary">
+            <div class="card-header">
+                <p><h1 class="card-title">Add Score for @trainee.FirstName @trainee.LastName @trainee.MiddleName</h1></p><br />
+                <hr />
+                <p><h4>Total: @testOrExam.Total</h4></p>
+            </div>
+            <div class="card-body">
+                <div>
+                    <form asp-action="AddScore">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <input asp-for="TraineeId" type="hidden" />
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" asp-for="TestOrExamId" />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Score" class="control-label"></label>
+                            <input asp-for="Score" class="form-control" />
+                            <span asp-validation-for="Score" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="Add Score" class="btn btn-primary" />
+                        </div>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <input type="hidden" asp-for="TestOrExamId"/>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Score" class="control-label"></label>
-                    <input asp-for="Score" class="form-control" />
-                    <span asp-validation-for="Score" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Add Score" class="btn btn-primary" />
-                </div>
-            </form>
+            </div>
+            <div class="card-footer">
+                <a class="btn bg-gradient-indigo" asp-action="ListTraineesForTest" asp-route-testOrExamId="@Model.TestOrExamId">Back to List</a>
+            </div>
         </div>
     </div>
 
-    <div>
-        <a class="btn bg-gradient-indigo" asp-action="ListTraineesForTest" asp-route-testOrExamId="@Model.TestOrExamId">Back to List</a>
-    </div>
+    
 
 
 </div>

@@ -11,7 +11,7 @@
 
 @if (Model.Count > 0)
 {
-    <div class="card">
+    <div class="card" id="result">
         <div class="card-header text-center">
             <div class="bg-gradient-indigo p-2">
                 <h2 class="text-white">Fintrak Academy Result</h2>
@@ -60,12 +60,14 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="card-footer text-center">
-                <button class="btn btn-secondary" onclick="printResult()">Print Result</button>
-            </div>
         </div>
     </div>
-
+    <div class="card">
+        <div class="card-footer text-center">
+            @*<input class="btn btn-primary" type="button" value="Download Result" id="btnPrint" />*@
+            <button class="btn btn-primary" id="btnPrint" onclick="printResult()">Print Result</button>
+        </div>
+    </div>
 }
 else
 {
@@ -74,9 +76,9 @@ else
     </div>
 }
 @section Scripts{
-    <script>
+    <script type="text/javascript">
         function printResult() {
-            window.print();
+           window.print();
         }
     </script>
 }

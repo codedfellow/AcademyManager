@@ -22,7 +22,7 @@
                     <div class="form-group">
                         <label asp-for="FacilitatorId"></label>
                         <select asp-for="FacilitatorId" asp-items="@Model.Facilitators">
-                            <option>Select Facilitator</option>
+                            <option value="">Select Facilitator</option>
                         </select>
                         @*@Html.DropDownListFor(m => m.Facilitators, new SelectList(Model.Facilitators, "Value", "Text"),"Select Facilitator",
                         new { @class = "form-control"})*@
